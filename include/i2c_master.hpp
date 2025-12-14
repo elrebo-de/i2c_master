@@ -25,6 +25,8 @@ public:
 	I2cMaster(std::string tag, i2c_port_num_t i2cPort, gpio_num_t sclPin, gpio_num_t sdaPin);
 	virtual ~I2cMaster();
 
+    i2c_master_bus_config_t GetConfig();
+
     i2c_master_dev_handle_t AddDevice(I2cDevice *device);
     void RemoveDevice(std::string deviceName);
     i2c_master_dev_handle_t GetDeviceHandle(std::string deviceName);

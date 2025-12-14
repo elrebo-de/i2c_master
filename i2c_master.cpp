@@ -50,6 +50,10 @@ I2cMaster::~I2cMaster() {
     ESP_ERROR_CHECK(i2c_del_master_bus(this->busHandle));
 }
 
+i2c_master_bus_config_t I2cMaster::GetConfig() {
+    return this->busConfig;
+}
+
 i2c_master_dev_handle_t I2cMaster::AddDevice(I2cDevice *device) {
 
     i2c_master_dev_handle_t devHandle;
