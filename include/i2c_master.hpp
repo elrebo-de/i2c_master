@@ -26,6 +26,7 @@ public:
 	virtual ~I2cMaster();
 
     i2c_master_bus_config_t GetConfig();
+    i2c_master_bus_handle_t GetHandle();
 
     i2c_master_dev_handle_t AddDevice(I2cDevice *device);
     void RemoveDevice(std::string deviceName);
