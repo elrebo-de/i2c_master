@@ -12,6 +12,7 @@
 
 #include <string>
 #include <map>
+#include "i2c_device.hpp"
 
 #include "driver/i2c_master.h"
 
@@ -24,8 +25,7 @@ public:
 	I2cMaster(std::string tag, i2c_port_num_t i2cPort, gpio_num_t sclPin, gpio_num_t sdaPin);
 	virtual ~I2cMaster();
 
-    i2c_master_dev_handle_t AddDevice(std::string deviceName, i2c_addr_bit_len_t devAddrLength,
-                                      uint16_t deviceAddress, uint32_t sclSpeedHz);
+    i2c_master_dev_handle_t AddDevice(I2cDevice *device);
     void RemoveDevice(std::string deviceName);
     i2c_master_dev_handle_t GetDeviceHandle(std::string deviceName);
 
@@ -35,10 +35,11 @@ private:
     gpio_num_t sclPin;
     gpio_num_t sdaPin;
 
+    i2c_master_bus_config_t busConfig;
     i2c_master_bus_handle_t busHandle;
 
     // Map of devices<deviceName, deviceHandle>
-    std::map<std::string, i2c_master_dev_handle_t> devices{};
+    std::map<std::string, I2cDevice *> devices{};
 };
 
 #endif /* I2C_MASTER_HPP_ */

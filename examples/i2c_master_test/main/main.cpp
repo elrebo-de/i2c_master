@@ -26,19 +26,23 @@ extern "C" void app_main(void)
     );
 
     // Add the MCP9808 device
-    i2c_master_dev_handle_t thermometerHandle = i2c.AddDevice(
+    i2c_master_dev_handle_t thermometerHandle = i2c.AddDevice(new I2cDevice(
+        std::string("thermometerDevice"), // tag
         std::string("Thermometer"), // deviceName
         (i2c_addr_bit_len_t) I2C_ADDR_BIT_LEN_7, // devAddrLength
         (uint16_t) 0x18, // deviceAddress
         (uint32_t) 50000 // sclSpeedHz
+        )
     );
 
     // Add the LCD device
-    i2c_master_dev_handle_t lcdHandle = i2c.AddDevice(
+    i2c_master_dev_handle_t lcdHandle = i2c.AddDevice(new I2cDevice(
+        std::string("lcdDevice"), // tag
         std::string("LCD"), // deviceName
         (i2c_addr_bit_len_t) I2C_ADDR_BIT_LEN_7, // devAddrLength
         (uint16_t) 0x78, // deviceAddress
         (uint32_t) 50000 // sclSpeedHz
+        )
     );
 
     int i = 0;
