@@ -31,7 +31,7 @@ I2cMaster::	I2cMaster(std::string tag,
         (i2c_clock_source_t) I2C_CLK_SRC_DEFAULT, // clk_source
         (uint8_t) 7, // glitch_ignore_cnt
         (int) 0, // intr_priority
-        (size_t) 2, // trans_queue_depth
+        (size_t) 200, // trans_queue_depth
         { // flags
             (uint32_t) true, // enable_internal_pullup
             (uint32_t) false, // allow_pd
