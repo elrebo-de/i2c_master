@@ -38,5 +38,5 @@ managed_components/
 
 dependencies.lock
 sdkconfig.old
-sdkconfig
+sdkconfig.los
 

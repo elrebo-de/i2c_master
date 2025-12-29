@@ -18,15 +18,23 @@ extern "C" void app_main(void)
     ESP_LOGI(tag, "I2C Master Bus Test Program");
 
     /* Configure the I2C Master Bus */
+    ESP_LOGI(tag, "I2cMaster");
     I2cMaster i2c(
 		std::string("I2C Master Bus"), // tag
 		(i2c_port_num_t) 0, // I2C_MASTER_NUM, // i2cPort
+		#ifdef CONFIG_IDF_TARGET_ESP32C3
 		(gpio_num_t) 6, // sclPin
 		(gpio_num_t) 5 // sdaPin
+		#elif CONFIG_IDF_TARGET_ESP32
+		(gpio_num_t) 32, // sclPin
+		(gpio_num_t) 26 // sdaPin
+		#endif
     );
 
     // Add the MCP9808 device
-    i2c_master_dev_handle_t thermometerHandle = i2c.AddDevice(new I2cDevice(
+    ESP_LOGI(tag, "I2cDevice Thermometer Device");
+    // i2c_master_dev_handle_t thermometerHandle =
+    i2c.AddDevice(new I2cDevice(
         std::string("thermometerDevice"), // tag
         std::string("Thermometer"), // deviceName
         (i2c_addr_bit_len_t) I2C_ADDR_BIT_LEN_7, // devAddrLength
@@ -36,16 +44,17 @@ extern "C" void app_main(void)
     );
 
     // Add the LCD device
-    i2c_master_dev_handle_t lcdHandle = i2c.AddDevice(new I2cDevice(
+    //i2c_master_dev_handle_t lcdHandle =
+    i2c.AddDevice(new I2cDevice(
         std::string("lcdDevice"), // tag
         std::string("LCD"), // deviceName
         (i2c_addr_bit_len_t) I2C_ADDR_BIT_LEN_7, // devAddrLength
-        (uint16_t) 0x78, // deviceAddress
+        (uint16_t) 0x3c, // deviceAddress
         (uint32_t) 50000 // sclSpeedHz
         )
     );
 
-    int i = 0;
+//    int i = 0;
 
     // MCP9808
     float temperature;
@@ -55,8 +64,6 @@ extern "C" void app_main(void)
 
     // Set resolution to 0.0625°C
     ESP_ERROR_CHECK(i2c_master_transmit(i2c.GetDeviceHandle(std::string("Thermometer")), set_resolution_buffer, 2, -1));
-
-    char buffer[11];
 
     while(true) {
         //mcp9808

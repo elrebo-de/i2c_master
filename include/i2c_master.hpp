@@ -1,7 +1,6 @@
 /*
  * i2c_master.hpp
  *
- *  Created on: 10.12.2025
  *      Author: christophoberle
  *
  * this work is licenced under the Apache 2.0 licence

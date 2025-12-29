@@ -1,7 +1,6 @@
 /*
  * i2c_master.cpp
  *
- *  Created on 10.12.2025
  *      Author: christophoberle
  *
  * this work is licenced under the Apache 2.0 licence
@@ -37,7 +36,7 @@ I2cMaster::	I2cMaster(std::string tag,
             (uint32_t) false, // allow_pd
         }
     };
-    ESP_ERROR_CHECK(i2c_new_master_bus(&busConfig, &(this->busHandle)));
+    ESP_ERROR_CHECK(i2c_new_master_bus(&(this->busConfig), &(this->busHandle)));
 }
 
 I2cMaster::~I2cMaster() {

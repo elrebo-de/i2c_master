@@ -1,7 +1,6 @@
 /*
  * i2c_device.hpp
  *
- *  Created on: 14.12.2025
  *      Author: christophoberle
  *
  * this work is licenced under the Apache 2.0 licence
