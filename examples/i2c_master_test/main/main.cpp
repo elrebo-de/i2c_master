@@ -68,7 +68,8 @@ extern "C" void app_main(void)
     while(true) {
         //mcp9808
         // Read the temperature from MCP9808
-        ESP_ERROR_CHECK(i2c_master_transmit_receive(i2c.GetDeviceHandle(std::string("Thermometer")), &request_temperature_buffer, 1, temperature_buffer, 2, -1));
+        ESP_ERROR_CHECK(i2c_master_transmit_receive(i2c.GetDeviceHandle(std::string("Thermometer")),
+                                                    &request_temperature_buffer, 1, temperature_buffer, 2, -1));
 
         temperature_buffer[0] = temperature_buffer[0] & 0x1F; //Clear flag bits
         if ((temperature_buffer[0] & 0x10) == 0x10){ //TA < 0°C

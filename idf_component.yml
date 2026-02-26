@@ -1,7 +1,7 @@
-version: "1.1.0"
+version: "1.1.1"
 license: "Apache 2.0"
 description: "I2C Master Bus component with I2cMaster and I2cDevice classes for ESP-IDF version 5.5.0+ using a C++ class"
-url: "https://github.com/elrebo-de/i2c_master"
+url: "https://elrebo.de/index.php/2026/02/26/i2c_master/"
 issues: "https://github.com/elrebo-de/i2c_master/issues"
 repository: "https://github.com/elrebo-de/i2c_master.git"
 maintainers:
