@@ -52,3 +52,24 @@ i2c_master_dev_handle_t I2cDevice::GetHandle() {
     return this->devHandle;
 }
 
+// ReadRegister method
+// reads one byte from a register
+uint8_t I2cDevice::ReadRegister(uint8_t reg_addr) {
+    uint8_t data_val = 0;
+
+    // Transmit register target address, then immediately capture 1 returned byte
+    esp_err_t err = i2c_master_transmit_receive(
+        this->devHandle,
+        &reg_addr, 1,
+        &data_val, 1,
+        -1
+    );
+
+    if (err != ESP_OK) {
+        ESP_LOGE(this->tag.c_str(), "I2C read failed at reg 0x%02X: %s", reg_addr, esp_err_to_name(err));
+        return 0;
+    }
+    return data_val;
+}
+
+

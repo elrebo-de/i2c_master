@@ -39,6 +39,13 @@ I2cMaster::	I2cMaster(std::string tag,
     ESP_ERROR_CHECK(i2c_new_master_bus(&(this->busConfig), &(this->busHandle)));
 }
 
+I2cMaster::	I2cMaster(std::string tag,
+           	          i2c_master_bus_handle_t busHandle) {
+	this->tag = tag;
+
+    this->busHandle = busHandle;
+}
+
 I2cMaster::~I2cMaster() {
     // Iterate over devices to remove them
     for (const auto& [deviceName, device] : this->devices) {
@@ -73,6 +80,10 @@ i2c_master_dev_handle_t I2cMaster::AddDevice(I2cDevice *device) {
 void I2cMaster::RemoveDevice(std::string deviceName) {
     delete this->devices.at(deviceName);
     this->devices.erase(deviceName);
+}
+
+I2cDevice * I2cMaster::GetDevice(std::string deviceName) {
+    return this->devices.at(deviceName);
 }
 
 i2c_master_dev_handle_t I2cMaster::GetDeviceHandle(std::string deviceName) {
