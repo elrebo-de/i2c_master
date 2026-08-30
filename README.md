@@ -1,13 +1,13 @@
 # I2cMaster component
 
-This repository contains an ESP-IDF component for the OnBoard LED. It runs on
+This repository contains an ESP-IDF component for the I2C communication. It runs on
 any ESP32 processor and is built using the ESP-IDF build system in version 5.5.0+.
 
 The component is implemented as C++ classes `I2cMaster` and `I2cDevice`.
 
 ## Connecting the component
 
-The constructor of class `I2cMaster` has four parameters:
+The first constructor of class `I2cMaster` has four parameters:
 
 | Parameter | Type of Parameter | Usage                             |
 |:----------|:------------------|:----------------------------------|
@@ -15,6 +15,17 @@ The constructor of class `I2cMaster` has four parameters:
 | i2cPort   | i2c_port_num_t    | the i2c port number               |
 | sclPin    | gpio_num_t        | the GPIO pin for SCL              |
 | sdaPin    | gpio_num_t        | the GPIO pin for SDA              |
+
+It creates a new i2c_master_bus.
+
+The second constructor of class `I2cMaster` has two parameters:
+
+| Parameter | Type of Parameter       | Usage                                                |
+|:----------|:------------------------|:-----------------------------------------------------|
+| tag       | std::string             | the tag to be used in the ESP log                    |
+| busHandle | i2c_master_bus_handle_t | the handle of the already initialized i2c_master_bus |
+
+It creates an instance of I2cMaster for an already initialized i2c_master_bus.
 
 The constructor of class `I2cDevice` has five parameters:
 
@@ -37,6 +48,8 @@ For every I2C device you define an instance of class `I2cDevice` and add it to `
 Now the device handles are available through method `GetDeviceHandle(std::string deviceName)` of class `I2cMaster`.
 
 To transmit data to an I2C device and to receive data from an I2C device you use the original ESP functions.
+
+There is one method `ReadRegister` in class `I2cDevice` to transmit one address byte to the device and immediately read one data byte from the device. 
 
 ## API
 The API of the component is located in the include directory files ```include/i2c_master.hpp``` and  ```include/i2c_device.hpp``` and defines the
