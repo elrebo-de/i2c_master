@@ -63,6 +63,7 @@ class I2cMaster {
 public:
     // Constructor of I2cMaster
 	I2cMaster(std::string tag, i2c_port_num_t i2cPort, gpio_num_t sclPin, gpio_num_t sdaPin);
+	I2cMaster(std::string tag, i2c_master_bus_handle_t bus_handle);
 	virtual ~I2cMaster();
 
     i2c_master_bus_config_t GetConfig();
@@ -71,6 +72,7 @@ public:
     i2c_master_dev_handle_t AddDevice(I2cDevice *device);
     void RemoveDevice(std::string deviceName);
     i2c_master_dev_handle_t GetDeviceHandle(std::string deviceName);
+    I2cDevice* GetDevice(std::string deviceName);
 
 private:
     std::string tag = "I2cMaster";
@@ -81,10 +83,10 @@ private:
     i2c_master_bus_config_t busConfig;
     i2c_master_bus_handle_t busHandle;
 
-    // Map of devices<deviceName, deviceHandle>
+    // Map of devices<deviceName, device*>
     std::map<std::string, I2cDevice *> devices{};
 };
- 
+
 /* class I2cDevice
    Implementation of an I2C device for I2C master bus for ESP IDF 5.5+
 */
@@ -100,6 +102,7 @@ public:
 
 	void SetHandle(i2c_master_dev_handle_t devHandle);
 	i2c_master_dev_handle_t GetHandle();
+    uint8_t ReadRegister(uint8_t reg_addr);
 
 private:
     std::string tag = "I2cDevice";
