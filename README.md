@@ -25,7 +25,7 @@ The second constructor of class `I2cMaster` has two parameters:
 | tag       | std::string             | the tag to be used in the ESP log                    |
 | busHandle | i2c_master_bus_handle_t | the handle of the already initialized i2c_master_bus |
 
-It creates an instance of I2cMaster for an already initialized i2c_master_bus.
+It creates an instance of `I2cMaster` for an already initialized i2c_master_bus.
 
 The constructor of class `I2cDevice` has five parameters:
 
@@ -47,9 +47,13 @@ For every I2C device you define an instance of class `I2cDevice` and add it to `
 
 Now the device handles are available through method `GetDeviceHandle(std::string deviceName)` of class `I2cMaster`.
 
-To transmit data to an I2C device and to receive data from an I2C device you use the original ESP functions.
+To transmit data to an I2C device and to receive data from an I2C device you use the original ESP functions or these low level methods of class `I2cDevide`:
+* Method `Write` writes a buffer with specified length to the device (timeout is -1)
+* Method `WriteAndRead` writes a buffer with specified length to the device and immediately reads a buffer with specified length from the device (timeout is -1)
 
-There is one method `ReadRegister` in class `I2cDevice` to transmit one address byte to the device and immediately read one data byte from the device. 
+In addition there are two higher level methods in class `I2cDevide`:
+* Method `ReadRegister` to transmit one address byte to the device and immediately read one data byte from the device.
+* Method `WriteRegister` to transmit one address byte and one data byte to the device.
 
 ## API
 The API of the component is located in the include directory files ```include/i2c_master.hpp``` and  ```include/i2c_device.hpp``` and defines the
@@ -102,7 +106,13 @@ public:
 
 	void SetHandle(i2c_master_dev_handle_t devHandle);
 	i2c_master_dev_handle_t GetHandle();
+	
     uint8_t ReadRegister(uint8_t reg_addr);
+    esp_err_t WriteRegister(uint8_t reg_addr, uint8_t data_val);
+
+    esp_err_t Write(uint8_t* write_buffer, uint8_t write_buffer_length);
+    esp_err_t WriteAndRead(uint8_t* write_buffer, uint8_t write_buffer_length,
+                           uint8_t* read_buffer, uint8_t read_buffer_length);
 
 private:
     std::string tag = "I2cDevice";

@@ -56,20 +56,22 @@ extern "C" void app_main(void)
 
 //    int i = 0;
 
-    // MCP9808
-    float temperature;
-    uint8_t set_resolution_buffer[2] = {0x08, 0x03};
-    uint8_t request_temperature_buffer = 0x05;
-    uint8_t temperature_buffer[2];
+    I2cDevice* thermometerDevice = NULL;
+    thermometerDevice = i2c.GetDevice(std::string("Thermometer"));
 
     // Set resolution to 0.0625°C
-    ESP_ERROR_CHECK(i2c_master_transmit(i2c.GetDeviceHandle(std::string("Thermometer")), set_resolution_buffer, 2, -1));
+    uint8_t set_resolution_buffer[2] = {0x08, 0x03};
+    ESP_ERROR_CHECK(thermometerDevice->Write(set_resolution_buffer, 2));
 
     while(true) {
-        //mcp9808
+        // MCP9808
+        float temperature;
+
         // Read the temperature from MCP9808
-        ESP_ERROR_CHECK(i2c_master_transmit_receive(i2c.GetDeviceHandle(std::string("Thermometer")),
-                                                    &request_temperature_buffer, 1, temperature_buffer, 2, -1));
+        uint8_t request_temperature_buffer = 0x05;
+        uint8_t temperature_buffer[2];
+        ESP_ERROR_CHECK(thermometerDevice->WriteAndRead(&request_temperature_buffer, 1,
+                                                        temperature_buffer, 2));
 
         temperature_buffer[0] = temperature_buffer[0] & 0x1F; //Clear flag bits
         if ((temperature_buffer[0] & 0x10) == 0x10){ //TA < 0°C

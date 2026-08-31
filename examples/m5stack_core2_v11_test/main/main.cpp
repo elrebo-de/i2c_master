@@ -37,9 +37,11 @@ extern "C" void app_main(void)
         )
     );
 
-    while(true) {
+    I2cDevice* device = NULL;
+
+    for(int i = 0; i < 10; i++) {
         // AXP2101
-        I2cDevice *device = i2c.GetDevice("AXP2101");
+        device = i2c.GetDevice("AXP2101");
 
         uint8_t msb = device->ReadRegister(0x34);
         uint8_t lsb = device->ReadRegister(0x35);
@@ -54,8 +56,19 @@ extern "C" void app_main(void)
         // It is actively charging if the status state is between 0 and 3
         bool is_charging = (charge_status <= 3);
 
-        ESP_LOGI(tag.c_str(), "Battery Voltage: %d mV, Charge State: %s(%d) (%d %%)", battery_voltage_mv, is_charging ? "Charging" : "Discharging", charge_status, battery_percentage);
+        ESP_LOGI(tag.c_str(), "%d: Battery Voltage: %d mV, Charge State: %s(%d) (%d %%)", i+1, battery_voltage_mv, is_charging ? "Charging" : "Discharging", charge_status, battery_percentage);
 
-        vTaskDelay(30000 / portTICK_PERIOD_MS); // delay 30 seconds
+        vTaskDelay(10000 / portTICK_PERIOD_MS); // delay 10 seconds
     }
+    // AXP2101: disconnect VBUS
+    ESP_LOGI(tag.c_str(), "AXP2101: disconnect VBUS");
+    uint8_t disconnectVbus[2] = {0x18, 0x01};
+    ESP_ERROR_CHECK(device->Write(disconnectVbus, 2));
+    vTaskDelay(100 / portTICK_PERIOD_MS); // delay 0.1 seconds
+
+    // AXP2101: power off
+    ESP_LOGI(tag.c_str(), "AXP2101: power off");
+    vTaskDelay(100 / portTICK_PERIOD_MS); // delay 0.1 seconds
+    uint8_t powerOff[2] = {0x10, 0x31};
+    ESP_ERROR_CHECK(device->Write(powerOff, 2));
 }

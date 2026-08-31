@@ -29,6 +29,10 @@ public:
 	void SetHandle(i2c_master_dev_handle_t devHandle);
 	i2c_master_dev_handle_t GetHandle();
     uint8_t ReadRegister(uint8_t reg_addr);
+    esp_err_t WriteRegister(uint8_t reg_addr, uint8_t data_val);
+    esp_err_t Write(uint8_t* write_buffer, uint8_t write_buffer_length);
+    esp_err_t WriteAndRead(uint8_t* write_buffer, uint8_t write_buffer_length,
+                           uint8_t* read_buffer, uint8_t read_buffer_length);
 
 private:
     std::string tag = "I2cDevice";
